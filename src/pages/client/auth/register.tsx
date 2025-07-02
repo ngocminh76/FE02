@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import type { FormProps } from 'antd';
 import { Button, Checkbox, Divider, Form, Input } from 'antd';
 import './register.scss'
+import { loginAPI } from '@/services/api';
 
 type FieldType = {
     username?: string;
@@ -10,16 +11,19 @@ type FieldType = {
     phone?: string;
 };
 
-const onFinish: FormProps<FieldType>['onFinish'] = (values) => {
-    console.log('Success:', values);
-};
 
 
 const RegisterPage = () => {
 
-    const [isSubmit, setIsSubmit] = useState(true)
+    const [isSubmit, setIsSubmit] = useState(false)
 
+    const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
+        console.log('Success:', values);
 
+        const res = await loginAPI("admin@gmail.com", "123456")
+        console.log(">>>>Check res :", res)
+    };
+    console.log("Check<<>>", import.meta.env.VITE_BACKEND_URL)
 
     return (
         <div>
