@@ -1,27 +1,36 @@
 import React, { useState } from 'react';
 import type { FormProps } from 'antd';
-import { Button, Checkbox, Divider, Form, Input } from 'antd';
+import { Button, Checkbox, Divider, Form, Input, App } from 'antd';
 import './register.scss'
-import { loginAPI } from '@/services/api';
+import { loginAPI, registerAPI } from '@/services/api';
+import { useNavigate } from 'react-router-dom';
 
 type FieldType = {
-    username?: string;
-    email?: string;
-    password?: string;
-    phone?: string;
+    email: string;
+    fullName: string;
+    password: string;
+    phone: string;
 };
 
 
 
 const RegisterPage = () => {
 
-    const [isSubmit, setIsSubmit] = useState(false)
-
+    const [isSubmit, setIsSubmit] = useState(false);
+    const { message } = App.useApp();
+    const navigate = useNavigate();
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
-        console.log('Success:', values);
-
-        const res = await loginAPI("admin@gmail.com", "123456")
-        console.log(">>>>Check res :", res)
+        setIsSubmit(true);
+        const { email, fullName, password, phone } = values
+        const res = await registerAPI(fullName, email, password, phone);
+        console.log(res.statusCode)
+        if (res.data) {
+            message.success("Đăng kí user thành công");
+            navigate("/login")
+        } else {
+            message.error(res.message)
+        }
+        setIsSubmit(false)
     };
     console.log("Check<<>>", import.meta.env.VITE_BACKEND_URL)
 
@@ -45,7 +54,7 @@ const RegisterPage = () => {
                             <Form.Item<FieldType>
                                 labelCol={{ span: 24 }}
                                 label="Họ tên"
-                                name="username"
+                                name="fullName"
                                 rules={[{ required: true, message: 'Please input your username!' }]}
                             >
                                 <Input />
@@ -77,12 +86,12 @@ const RegisterPage = () => {
                                 name="phone" labelCol={{ span: 24 }}
                                 rules={[{ required: true, message: 'Please input your phone!' }]}
                             >
-                                <Input.Password />
+                                <Input />
                             </Form.Item>
 
-                            <Form.Item<FieldType> name="phone" valuePropName="checked" label={null}>
+                            {/* <Form.Item<FieldType> name="phone" valuePropName="checked" label={null}>
                                 <Checkbox>Remember me</Checkbox>
-                            </Form.Item>
+                            </Form.Item> */}
 
                             <Form.Item >
                                 <Button type="primary" htmlType="submit" loading={isSubmit}>
