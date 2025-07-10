@@ -4,6 +4,7 @@ import { Button, Divider, Form, Input, App } from 'antd';
 import './register.scss'
 import { loginAPI } from '@/services/api';
 import { useNavigate } from 'react-router-dom';
+import { useCurrentApp } from '@/components/context/app.context';
 
 type FieldType = {
     userName: string;
@@ -13,15 +14,19 @@ type FieldType = {
 
 const LoginPage = () => {
 
+    const navigate = useNavigate();
     const [isSubmit, setIsSubmit] = useState(false);
     const { message, notification } = App.useApp();
-    const navigate = useNavigate();
+    const { setUser, setIsAuthenticated } = useCurrentApp();
+
     const onFinish: FormProps<FieldType>['onFinish'] = async (values) => {
         setIsSubmit(true);
         const { userName, password } = values
         const res = await loginAPI(userName, password);
 
         if (res.data) {
+            setIsAuthenticated(true);
+            setUser(res.data.user);
             localStorage.setItem('access_token', res.data.access_token)
             message.success("Đăng nhập thành công");
             navigate("/")
@@ -80,7 +85,7 @@ const LoginPage = () => {
 
                             <Divider>Or</Divider>
                             <p className='text text-normal' style={{ textAlign: "center" }}>
-                                Chưa có tài khoản ? <a href="/login">Đăng kí</a>
+                                Chưa có tài khoản ? <a href="/register">Đăng kí</a>
                             </p>
                         </Form>
 
