@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import type { FormProps } from 'antd';
-import { Button, Checkbox, Divider, Form, Input, App } from 'antd';
+import { Button, Divider, Form, Input, App } from 'antd';
 import './register.scss'
-import { loginAPI, registerAPI } from '@/services/api';
+import { registerAPI } from '@/services/api';
 import { useNavigate } from 'react-router-dom';
 
 type FieldType = {
@@ -23,6 +23,7 @@ const RegisterPage = () => {
         setIsSubmit(true);
         const { email, fullName, password, phone } = values
         const res = await registerAPI(fullName, email, password, phone);
+
         console.log(res.statusCode)
         if (res.data) {
             message.success("Đăng kí user thành công");
