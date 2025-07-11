@@ -16,5 +16,9 @@ export const registerAPI = (fullName: string, email: string, password: string, p
 
 export const fetchAccountAPI = () => {
     const urlBacked = "/api/v1/auth/account"
-    return axios.get<IBackendRes<IFetchAccount>>(urlBacked)
+    return axios.get<IBackendRes<IFetchAccount>>(urlBacked, {
+        headers: {
+            delay: 3000
+        }
+    })
 }
