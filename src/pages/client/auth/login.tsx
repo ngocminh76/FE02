@@ -60,7 +60,7 @@ const LoginPage = () => {
                         >
                             <Form.Item<FieldType>
                                 labelCol={{ span: 24 }}
-                                label="Họ tên"
+                                label="Email"
                                 name="userName"
                                 rules={[{ required: true, message: 'Please input your username!' }]}
                             >
