@@ -22,3 +22,8 @@ export const fetchAccountAPI = () => {
         }
     })
 }
+
+export const logoutAPI = () => {
+    const urlBacked = "/api/v1/auth/logout"
+    return axios.post<IBackendRes<IFetchAccount>>(urlBacked)
+}
