@@ -27,3 +27,9 @@ export const logoutAPI = () => {
     const urlBacked = "/api/v1/auth/logout"
     return axios.post<IBackendRes<IFetchAccount>>(urlBacked)
 }
+
+
+export const getUsersAPI = () => {
+    const urlBacked = "/api/v1/user?current=1&pageSize=5"
+    return axios.get<IBackendRes<IModelPaginate<IUserTable>>>(urlBacked)
+}
