@@ -29,7 +29,12 @@ export const logoutAPI = () => {
 }
 
 
-export const getUsersAPI = (current: number, pageSize: number) => {
-    const urlBacked = `/api/v1/user?current=${current}&pageSize=${pageSize}`
+// export const getUsersAPI = (current: number, pageSize: number) => {
+//     const urlBacked = `/api/v1/user?current=${current}&pageSize=${pageSize}`
+//     return axios.get<IBackendRes<IModelPaginate<IUserTable>>>(urlBacked)
+// }
+
+export const getUsersAPI = (query: string) => {
+    const urlBacked = `/api/v1/user?${query}`
     return axios.get<IBackendRes<IModelPaginate<IUserTable>>>(urlBacked)
 }
