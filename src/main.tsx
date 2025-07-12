@@ -19,6 +19,11 @@ import ManageOrderPage from './pages/admin/manage.order';
 import ManageBookPage from './pages/admin/manage.book';
 import DashBoardPage from './pages/admin/dashboard';
 import LayoutAdmin from './components/layout/layout.admin';
+import { ConfigProvider } from "antd";
+import enUS from 'antd/locale/en_US';
+import viVN from 'antd/locale/vi_VN';
+
+
 const router = createBrowserRouter([
   {
     path: "/",
@@ -117,8 +122,11 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App>
       <AppProvider>
+        <ConfigProvider locale={enUS}>
 
-        <RouterProvider router={router} />
+          <RouterProvider router={router} />
+        </ConfigProvider>
+
       </AppProvider>
     </App>
   </StrictMode>,
