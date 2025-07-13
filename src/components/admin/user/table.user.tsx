@@ -1,12 +1,13 @@
 import { getUsersAPI } from '@/services/api';
 import { dateRangeValidate } from '@/services/helper';
-import { DeleteTwoTone, EditTwoTone, PlusOutlined } from '@ant-design/icons';
+import { CloudUploadOutlined, DeleteTwoTone, EditTwoTone, ExportOutlined, PlusOutlined } from '@ant-design/icons';
 import type { ActionType, ProColumns } from '@ant-design/pro-components';
 import { ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import { useRef, useState } from 'react';
 import DetailUser from './detail.user';
 import CreateUser from './create.user';
+import ImportUser from './data/import.user';
 
 
 type TSearch = {
@@ -27,6 +28,7 @@ const TableUser = () => {
     const [openViewDetail, setOpenViewDetail] = useState<boolean>(false);
     const [dataViewDetail, setDataViewDetail] = useState<IUserTable | null>(null);
     const [openModelCreate, setOpenModelCreate] = useState<boolean>(false)
+    const [openModelImport, setOpenModelImport] = useState<boolean>(false)
     const columns: ProColumns<IUserTable>[] = [
         {
             dataIndex: 'index',
@@ -153,6 +155,29 @@ const TableUser = () => {
                 toolBarRender={() => [
                     <Button
                         key="button"
+                        icon={<ExportOutlined />}
+                        onClick={() => {
+                            // actionRef.current?.reload();
+                            setOpenModelCreate(true);
+                        }}
+                        type="primary"
+                    >
+                        Export
+                    </Button>,
+
+                    <Button
+                        key="button"
+                        icon={<CloudUploadOutlined />}
+                        onClick={() => {
+                            // actionRef.current?.reload();
+                            setOpenModelImport(true);
+                        }}
+                        type="primary"
+                    >
+                        Import
+                    </Button>,
+                    <Button
+                        key="button"
                         icon={<PlusOutlined />}
                         onClick={() => {
                             // actionRef.current?.reload();
@@ -178,6 +203,11 @@ const TableUser = () => {
                 setOpenModelCreate={setOpenModelCreate}
                 refreshTable={refreshTable}>
             </CreateUser>
+
+
+            <ImportUser openModelImport={openModelImport} setOpenModelImport={setOpenModelImport}>
+
+            </ImportUser>
         </>
     );
 };
