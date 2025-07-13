@@ -6,6 +6,7 @@ import { ProTable } from '@ant-design/pro-components';
 import { Button } from 'antd';
 import { useRef, useState } from 'react';
 import DetailUser from './detail.user';
+import CreateUser from './create.user';
 
 
 type TSearch = {
@@ -23,10 +24,9 @@ const TableUser = () => {
         pages: 0,
         total: 0
     })
-
     const [openViewDetail, setOpenViewDetail] = useState<boolean>(false);
     const [dataViewDetail, setDataViewDetail] = useState<IUserTable | null>(null);
-
+    const [openModelCreate, setOpenModelCreate] = useState<boolean>(false)
     const columns: ProColumns<IUserTable>[] = [
         {
             dataIndex: 'index',
@@ -87,6 +87,9 @@ const TableUser = () => {
             },
         }
     ];
+    const refreshTable = () => {
+        actionRef.current?.reload();
+    }
     return (
         <>
             <ProTable<IUserTable, TSearch>
@@ -114,6 +117,8 @@ const TableUser = () => {
                             query += `&createdAt>=${createDateRange[0]}&createdAt<=${createDateRange[1]}`;
                         }
                     }
+                    // default
+                    query += `&sort=-createdAt`;
                     if (sort && sort.createdAt) {
                         query += `&sort=${sort.createdAt === "ascend" ? "createdAt" : "-createdAt"}`
                     }
@@ -150,7 +155,8 @@ const TableUser = () => {
                         key="button"
                         icon={<PlusOutlined />}
                         onClick={() => {
-                            actionRef.current?.reload();
+                            // actionRef.current?.reload();
+                            setOpenModelCreate(true);
                         }}
                         type="primary"
                     >
@@ -166,8 +172,12 @@ const TableUser = () => {
                 dataViewDetail={dataViewDetail}
                 setDataViewDetail={setDataViewDetail}
             >
-
             </DetailUser>
+
+            <CreateUser openModelCreate={openModelCreate}
+                setOpenModelCreate={setOpenModelCreate}
+                refreshTable={refreshTable}>
+            </CreateUser>
         </>
     );
 };
