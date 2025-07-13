@@ -205,7 +205,7 @@ const TableUser = () => {
             </CreateUser>
 
 
-            <ImportUser openModelImport={openModelImport} setOpenModelImport={setOpenModelImport}>
+            <ImportUser openModelImport={openModelImport} setOpenModelImport={setOpenModelImport} refreshTable={refreshTable}>
 
             </ImportUser>
         </>

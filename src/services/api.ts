@@ -44,3 +44,14 @@ export const createUsersAPI = (fullName: string, email: string, password: string
         fullName, email, password, phone
     })
 }
+
+
+export const bulkCreateUserAPI = (data: {
+    fullName: string;
+    password: string;
+    email: string;
+    phone: string
+}[]) => {
+    const urlBacked = "/api/v1/user/bulk-create"
+    return axios.post<IBackendRes<IResponseImport>>(urlBacked, data)
+}
