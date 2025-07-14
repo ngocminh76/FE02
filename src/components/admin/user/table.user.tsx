@@ -8,7 +8,7 @@ import { useRef, useState } from 'react';
 import DetailUser from './detail.user';
 import CreateUser from './create.user';
 import ImportUser from './data/import.user';
-
+import { CSVLink } from 'react-csv';
 
 type TSearch = {
     fullName: string;
@@ -29,6 +29,7 @@ const TableUser = () => {
     const [dataViewDetail, setDataViewDetail] = useState<IUserTable | null>(null);
     const [openModelCreate, setOpenModelCreate] = useState<boolean>(false)
     const [openModelImport, setOpenModelImport] = useState<boolean>(false)
+    const [currentDataTable, setCurrentDataTable] = useState<IUserTable[]>([])
     const columns: ProColumns<IUserTable>[] = [
         {
             dataIndex: 'index',
@@ -128,7 +129,8 @@ const TableUser = () => {
                     const res = await getUsersAPI(query);
 
                     if (res.data) {
-                        setMeta(res.data.meta)
+                        setMeta(res.data.meta);
+                        setCurrentDataTable(res.data?.result ?? []);
                     }
                     return {
                         data: res.data?.result,
@@ -156,15 +158,12 @@ const TableUser = () => {
                     <Button
                         key="button"
                         icon={<ExportOutlined />}
-                        onClick={() => {
-                            // actionRef.current?.reload();
-                            setOpenModelCreate(true);
-                        }}
                         type="primary"
                     >
-                        Export
+                        <CSVLink data={currentDataTable} filename='export-user.csv'>
+                            Export
+                        </CSVLink>
                     </Button>,
-
                     <Button
                         key="button"
                         icon={<CloudUploadOutlined />}
