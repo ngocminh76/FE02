@@ -1,10 +1,11 @@
 import { InboxOutlined } from "@ant-design/icons";
-import { App, message, Modal, notification, Table, Upload } from "antd";
+import { App, Modal, notification, Table, Upload } from "antd";
 import type { UploadProps } from "antd/lib";
 import { Buffer } from "buffer";
 import { useState } from "react";
 import Exceljs from 'exceljs'
 import { bulkCreateUserAPI } from "@/services/api";
+import templateFile from "assets/template/user.xlsx?url"
 const { Dragger } = Upload
 interface IProps {
     openModelImport: boolean;
@@ -19,12 +20,9 @@ interface IDataImport {
 }
 const ImportUser = (props: IProps) => {
     const { openModelImport, setOpenModelImport, refreshTable } = props;
-
     const { message } = App.useApp();
     const [dataImport, setDataImport] = useState<IDataImport[]>([])
-
     const [isSubmit, setIsSubmit] = useState<boolean>(false);
-
     const propsUpload: UploadProps = {
         name: 'file',
         multiple: true,
@@ -51,8 +49,6 @@ const ImportUser = (props: IProps) => {
                     const arrayBuffer = await file.arrayBuffer();
                     const buffer = Buffer.from(arrayBuffer);
                     await workbook.xlsx.load(buffer);
-
-
                     let jsonData: IDataImport[] = [];
                     workbook.worksheets.forEach(function (sheet) {
                         // read first row as data keys
@@ -65,17 +61,14 @@ const ImportUser = (props: IProps) => {
                             let obj: any = {};
                             for (let i = 1; i < keys.length; i++) {
                                 obj[keys[i]] = values[i];
-
                             }
                             jsonData.push(obj);
                         })
-
                     });
                     jsonData = jsonData.map((item, index) => {
                         return { ...item, id: index + 1 }
                     })
                     setDataImport(jsonData)
-
                 }
             } else if (status === 'error') {
                 message.error(`${info.file.name} file upload failed.`);
@@ -85,7 +78,6 @@ const ImportUser = (props: IProps) => {
             console.log('Dropped files', e.dataTransfer.files);
         },
     };
-
     const handleImport = async () => {
         setIsSubmit(true);
         const dataSubmit = dataImport.map(item => ({
@@ -128,7 +120,13 @@ const ImportUser = (props: IProps) => {
                     </p>
                     <p className="ant-upload-text">Click or drag file to this area to upload</p>
                     <p className="ant-upload-hint">
-                        Support for a single or bulk upload. Only accept .csv, .xls, .xlsx
+                        Support for a single or bulk upload. Only accept .csv, .xls, .xlsx &nbsp;
+                        <a
+                            onClick={e => e.stopPropagation()}
+                            href={templateFile} download
+                        >
+                            Download Sample File
+                        </a>
                     </p>
                 </Dragger>
 
