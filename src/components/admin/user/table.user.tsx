@@ -9,6 +9,7 @@ import DetailUser from './detail.user';
 import CreateUser from './create.user';
 import ImportUser from './data/import.user';
 import { CSVLink } from 'react-csv';
+import UpdateUser from './update.user';
 
 type TSearch = {
     fullName: string;
@@ -30,6 +31,8 @@ const TableUser = () => {
     const [openModelCreate, setOpenModelCreate] = useState<boolean>(false)
     const [openModelImport, setOpenModelImport] = useState<boolean>(false)
     const [currentDataTable, setCurrentDataTable] = useState<IUserTable[]>([])
+    const [openModelUpdate, setOpenModelUpdate] = useState<boolean>(false)
+    const [dataUpdate, setDataUpdate] = useState<IUserTable | null>(null)
     const columns: ProColumns<IUserTable>[] = [
         {
             dataIndex: 'index',
@@ -83,7 +86,10 @@ const TableUser = () => {
             render(dom, entity, index, action, schema) {
                 return (
                     <>
-                        <EditTwoTone twoToneColor="#f57800" style={{ cursor: "pointer", marginRight: 15 }} />
+                        <EditTwoTone twoToneColor="#f57800" style={{ cursor: "pointer", marginRight: 15 }} onClick={() => {
+                            setDataUpdate(entity);
+                            setOpenModelUpdate(true);
+                        }} />
                         <DeleteTwoTone twoToneColor="#ff4d4f" style={{ cursor: 'pointer' }} />
                     </>
                 )
@@ -204,9 +210,11 @@ const TableUser = () => {
             </CreateUser>
 
 
-            <ImportUser openModelImport={openModelImport} setOpenModelImport={setOpenModelImport} refreshTable={refreshTable}>
+            <ImportUser openModelImport={openModelImport} setOpenModelImport={setOpenModelImport} refreshTable={refreshTable} />
 
-            </ImportUser>
+
+            <UpdateUser openModelUpdate={openModelUpdate} setOpenModelUpdate={setOpenModelUpdate} refreshTable={refreshTable}
+                setDataUpdate={setDataUpdate} dataUpdate={dataUpdate} />
         </>
     );
 };
